@@ -10,7 +10,7 @@ import beginSchedule from "./scheduler";
 
 const { secret } = process.env;
 
-const port = 5056;
+const port = 5057;
 
 const moduleRegistration = {
   id: "events",
