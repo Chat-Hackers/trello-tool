@@ -9,6 +9,6 @@ This tool creates event reminders within a group chat. It collect urls from luma
 1. Clone the repo
 1. Run the command `npm install`
 1. Run the command `npm run dev`
-1. Copy the `events.json` file and paste into the `registrations` folder of [the wrapper project](https://github.com/King-Mob/chathackers-wrapper)
-1. Ask your testing buddy to send "rainbow" to the WhatsApp group
+1. Copy the `events.json` file and paste into the `registrations` folder of [the wrapper project](https://github.com/chat-hackers/tool-hub)
+1. Send an event url to your whatsapp group
 1. Marvel in delight at your newfound power
