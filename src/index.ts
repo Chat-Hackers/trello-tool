@@ -3,27 +3,22 @@ import express from "express";
 import * as fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import handleMessage from "./messages";
-import { sendMessage } from './requests';
-import { tryGetEvent } from './events';
-import { getEventsByRoomId, insertEvent, removeEvent } from './duckdb';
-import beginSchedule from "./scheduler";
+import handleReaction from "./reactions";
 
-const { secret } = process.env;
+const { wrapper_url } = process.env;
 
-const port = 5057;
+const port = 5059;
 
 const moduleRegistration = {
-  id: "events",
+  id: "trello",
   uuid: uuidv4(),
   url: `http://localhost:${port}`,
-  emoji: "🗓️",
-  wake_word: "events",
-  title: "Events Reminder",
-  description: "Sends reminders of upcoming events to the group",
-  secret,
+  emoji: "📝",
+  introduction: `React to a message with ✏️ to link your trello board, then use ✏️ again to send messages to your board.`,
+  title: "Trello Integration",
+  description: "Adds tasks to trello board",
   event_types: [
-    "m.room.message"
+    "m.reaction"
   ]
 }
 
@@ -43,61 +38,22 @@ async function start() {
   })
 
   app.post("/", async (req, res) => {
-    const { event } = req.body;
+    const { event, botUserId } = req.body;
 
-    let response: { message?: string } | undefined = {};
+    console.log("trello tool sees event: ", event);
 
-    if (event.type === "m.room.message")
-      response = await handleMessage(event);
+    let response = {};
 
-    console.log(response)
+    if (event.type === "m.reaction")
+      response = await handleReaction(event, botUserId) || {};
+
+    console.log("trello tool responds: ", response)
 
     res.send({ success: true, response });
   });
-
-  app.get("/api/events", async (req, res) => {
-    const { roomId } = req.query;
-
-    const eventUrls = await getEventsByRoomId(roomId as string);
-    const events = (
-      await Promise.all(
-        eventUrls.map(async (event) => {
-          const eventDetails = await tryGetEvent(event.event_url as string);
-          if (!eventDetails) return null;
-          return {
-            name: eventDetails.name,
-            startDate: eventDetails.startDate,
-            roomId: event.room_id as string,
-            url: event.event_url as string
-          };
-        })
-      )
-    ).filter((event) => event !== null).filter(event => event.roomId === roomId);
-
-    res.send(events);
-  })
-
-  app.post("/api/event", async (req, res) => {
-    const { roomId } = req.query;
-    const { url } = req.body;
-
-    await insertEvent(roomId as string, url);
-
-    res.send({ success: true })
-  })
-
-  app.delete("/api/event", async (req, res) => {
-    const { roomId } = req.query;
-    const { url } = req.body;
-
-    await removeEvent(roomId as string, url);
-
-    res.send({ success: true })
-  })
 
   app.listen(port);
 };
 
 generateRegistrationFile();
 start();
-setTimeout(beginSchedule, 2000)

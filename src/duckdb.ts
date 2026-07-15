@@ -1,23 +1,24 @@
 import { DuckDBConnection, DuckDBInstance } from "@duckdb/node-api";
 import path from "node:path";
+import { Board } from "../types";
 
 let connection: DuckDBConnection;
 let instance: DuckDBInstance;
 
 export async function startDuckDB() {
-    const eventsDuckDBFileName = "events_duckdb.db";
+    const trelloDuckDBFileName = "trello_duckdb.db";
 
     const dataDir = process.env.DUCKDB_DATA_DIR ?? path.resolve(__dirname, "../..");
-    const dbPath = path.join(dataDir, eventsDuckDBFileName);
+    const dbPath = path.join(dataDir, trelloDuckDBFileName);
 
     instance = await DuckDBInstance.create(dbPath);
     connection = await instance.connect();
 
     const tables = [
         {
-            name: "Events",
+            name: "Boards",
             creationCommand:
-                "CREATE TABLE Events (room_id VARCHAR NOT NULL, event_url VARCHAR NOT NULL, past BOOLEAN NOT NULL);",
+                "CREATE TABLE Boards (room_id VARCHAR NOT NULL, board_id VARCHAR NOT NULL, token VARCHAR NOT NULL);",
         }
     ]
 
@@ -36,48 +37,21 @@ export async function startDuckDB() {
     });
 }
 
-export async function getEventsAll() {
-    const getEvents = `SELECT * FROM Events;`;
-    const prepared = await connection.prepare(getEvents);
-    const eventsRows = await prepared.run();
-    const events = await eventsRows.getRowObjects();
-    return events;
+export async function getBoardByRoomId(roomId: string) {
+    const getTrello = `SELECT * FROM Boards WHERE room_id = $1;`;
+    const prepared = await connection.prepare(getTrello);
+    prepared.bindVarchar(1, roomId);
+    const boardRows = await prepared.run();
+    const boards = await boardRows.getRowObjects();
+    return boards[0] as Board;
 }
 
-export async function getEventsByRoomId(roomId: string) {
-    const getEvents = `SELECT * FROM Events WHERE room_id = $1;`;
-    const prepared = await connection.prepare(getEvents);
+export async function insertBoard(roomId: string, boardId: string, token: string) {
+    const insertBoard = `INSERT INTO Boards values ($1, $2, $3, $4);`;
+    const prepared = await connection.prepare(insertBoard);
     prepared.bindVarchar(1, roomId);
-    const eventsRows = await prepared.run();
-    const events = await eventsRows.getRowObjects();
-    return events;
-}
-
-export async function insertEvent(roomId: string, url: string) {
-    const insertEvent = `INSERT INTO Events values ($1, $2, $3);`;
-    const prepared = await connection.prepare(insertEvent);
-    prepared.bindVarchar(1, roomId);
-    prepared.bindVarchar(2, url);
-    prepared.bindBoolean(3, false);
-    await prepared.run();
-    return;
-}
-
-export async function updateEvent(roomId: string, url: string, past: boolean) {
-    const updateEvent = `UPDATE Events SET past = $3 WHERE room_id = $1 AND event_url = $2`;
-    const prepared = await connection.prepare(updateEvent);
-    prepared.bindVarchar(1, roomId);
-    prepared.bindVarchar(2, url);
-    prepared.bindBoolean(3, past);
-    await prepared.run();
-    return;
-}
-
-export async function removeEvent(roomId: string, url: string) {
-    const deleteEvent = `DELETE FROM Events WHERE room_id=$1 AND event_url=$2;`;
-    const prepared = await connection.prepare(deleteEvent);
-    prepared.bindVarchar(1, roomId);
-    prepared.bindVarchar(2, url);
+    prepared.bindVarchar(2, boardId);
+    prepared.bindVarchar(3, token);
     await prepared.run();
     return;
 }
