@@ -56,4 +56,12 @@ export async function insertBoard(roomId: string, boardId: string, token: string
     return;
 }
 
+export async function deleteBoard(roomId: string) {
+    const deleteBoard = `DELETE FROM Boards WHERE room_id=$1`;
+    const prepared = await connection.prepare(deleteBoard);
+    prepared.bindVarchar(1, roomId);
+    await prepared.run();
+    return;
+}
+
 startDuckDB();

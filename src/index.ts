@@ -4,6 +4,7 @@ import * as fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import handleReaction from "./reactions";
+import { deleteBoard, getBoardByRoomId } from './duckdb';
 
 const { wrapper_url } = process.env;
 
@@ -51,6 +52,26 @@ async function start() {
 
     res.send({ success: true, response });
   });
+
+  app.get("/api/trello", async (req, res) => {
+    const { roomId } = req.query;
+
+    const board = await getBoardByRoomId(roomId as string) || {};
+
+    res.send(board);
+  })
+
+  app.post("/api/trello", async (req, res) => {
+
+  })
+
+  app.delete("/api/trello", async (req, res) => {
+    const { roomId } = req.query;
+
+    await deleteBoard(roomId as string);
+
+    res.send({ success: true })
+  })
 
   app.listen(port);
 };

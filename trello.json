@@ -1,1 +1,1 @@
-{"id":"trello","uuid":"c9869bf9-9211-44d6-a759-d350ff070703","url":"http://localhost:5059","emoji":"📝","wake_word":"trello","title":"Trello Integration","description":"Adds tasks to trello board","event_types":["m.reaction"]}
+{"id":"trello","uuid":"b861b2ac-4b01-4cd6-b50c-db3db64a7a2f","url":"http://localhost:5059","emoji":"📝","introduction":"React to a message with ✏️ to link your trello board, then use ✏️ again to send messages to your board.","title":"Trello Integration","description":"Adds tasks to trello board","event_types":["m.reaction"]}
