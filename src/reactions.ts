@@ -27,7 +27,11 @@ async function startCardCreation(boardId: string, event: MatrixEvent, token: str
 async function createCardOnList(context: Context, token: string) {
     const { cardToBeListed, listId, listName } = context;
 
+    console.log("creating card context:", context)
+
     const card = await createCard(listId, cardToBeListed, token) as { [key: string]: any };
+
+    console.log(card)
 
     return {
         message: `Card created and added to ${listName}. React with ❤️ to this message to assign to a member.`,

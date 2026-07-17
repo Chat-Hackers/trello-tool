@@ -42,6 +42,8 @@ async function start() {
     const { event, botUserId } = req.body;
 
     console.log("trello tool sees event: ", event);
+    if (event.prevEvent)
+      console.log("prevEvent", event.prevEvent)
 
     let response = {};
 
