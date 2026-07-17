@@ -72,8 +72,9 @@ export default function App() {
 
   async function connectBoard(boardId: string) {
     if (roomId && urlToken) {
-      setBoardId(boardId);
       postBoard(roomId, boardId, urlToken);
+      setBoardId(boardId);
+      setBoardToken(urlToken);
     }
   }
 

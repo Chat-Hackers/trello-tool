@@ -47,7 +47,7 @@ export async function getBoardByRoomId(roomId: string) {
 }
 
 export async function insertBoard(roomId: string, boardId: string, token: string) {
-    const insertBoard = `INSERT INTO Boards values ($1, $2, $3, $4);`;
+    const insertBoard = `INSERT INTO Boards values ($1, $2, $3);`;
     const prepared = await connection.prepare(insertBoard);
     prepared.bindVarchar(1, roomId);
     prepared.bindVarchar(2, boardId);

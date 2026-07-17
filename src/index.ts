@@ -4,7 +4,7 @@ import * as fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import handleReaction from "./reactions";
-import { deleteBoard, getBoardByRoomId } from './duckdb';
+import { deleteBoard, getBoardByRoomId, insertBoard } from './duckdb';
 
 const { wrapper_url } = process.env;
 
@@ -62,7 +62,12 @@ async function start() {
   })
 
   app.post("/api/trello", async (req, res) => {
+    const { roomId } = req.query;
+    const { boardId, token } = req.body;
 
+    await insertBoard(roomId as string, boardId, token);
+
+    res.send({ success: true });
   })
 
   app.delete("/api/trello", async (req, res) => {

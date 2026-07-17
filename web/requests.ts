@@ -15,30 +15,30 @@ export async function getTrelloBoardDetails(boardId: string, token: string) {
 }
 
 export async function getBoard(roomId: string) {
-    const eventsResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`);
-    const eventsResult = await eventsResponse.json();
+    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`);
+    const boardResult = await boardResponse.json();
 
-    return eventsResult;
+    return boardResult;
 }
 
 export async function postBoard(roomId: string, boardId: string, token: string) {
-    const eventsResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`, {
+    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`, {
         method: "POST",
         body: JSON.stringify({ boardId, token }),
         headers: {
             "Content-Type": "application/json"
         }
     });
-    const eventsResult = await eventsResponse.json();
+    const boardResult = await boardResponse.json();
 
-    return eventsResult;
+    return boardResult;
 }
 
 export async function deleteBoard(roomId: string) {
-    const eventsResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`, {
+    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`, {
         method: "DELETE"
     });
-    const eventsResult = await eventsResponse.json();
+    const boardResult = await boardResponse.json();
 
-    return eventsResult;
+    return boardResult;
 }
