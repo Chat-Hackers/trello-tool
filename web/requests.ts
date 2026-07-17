@@ -15,14 +15,14 @@ export async function getTrelloBoardDetails(boardId: string, token: string) {
 }
 
 export async function getBoard(roomId: string) {
-    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`);
+    const boardResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`);
     const boardResult = await boardResponse.json();
 
     return boardResult;
 }
 
 export async function postBoard(roomId: string, boardId: string, token: string) {
-    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`, {
+    const boardResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`, {
         method: "POST",
         body: JSON.stringify({ boardId, token }),
         headers: {
@@ -35,7 +35,7 @@ export async function postBoard(roomId: string, boardId: string, token: string) 
 }
 
 export async function deleteBoard(roomId: string) {
-    const boardResponse = await fetch(`${BASE_URL}api/trello?roomId=${roomId}`, {
+    const boardResponse = await fetch(`${BASE_URL}/api/trello?roomId=${roomId}`, {
         method: "DELETE"
     });
     const boardResult = await boardResponse.json();
