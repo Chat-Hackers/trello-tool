@@ -90,7 +90,7 @@ export default function App() {
   const trelloLink = `${VITE_AUTH_LINK}&return_url=${VITE_WRAPPER_URL}/trello/?roomId=${roomId}`;
 
   return (
-    <div>
+    <>
       <h1>Trello Link</h1>
       {boardId ? (
         <>
@@ -120,6 +120,6 @@ export default function App() {
           </a>
         </>
       )}
-    </div>
+    </>
   );
 }
