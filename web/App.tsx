@@ -9,7 +9,7 @@ import {
   deleteBoard,
 } from "./requests";
 
-const { VITE_AUTH_LINK, VITE_HUB_URL } = import.meta.env;
+const { VITE_TRELLO_AUTH_LINK, VITE_HUB_URL } = import.meta.env;
 
 export default function App() {
   const [searchParams] = useSearchParams();
@@ -87,7 +87,7 @@ export default function App() {
     }
   }
 
-  const trelloLink = `${VITE_AUTH_LINK}&return_url=${VITE_HUB_URL}/trello/?roomId=${roomId}`;
+  const trelloLink = `${VITE_TRELLO_AUTH_LINK}&return_url=${VITE_HUB_URL}/trello/?roomId=${roomId}`;
 
   return (
     <>
