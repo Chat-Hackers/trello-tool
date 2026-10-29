@@ -10,7 +10,7 @@ const { wrapper_url } = process.env;
 
 const port = 5059;
 
-const moduleRegistration = {
+const toolRegistration = {
   id: "trello",
   uuid: uuidv4(),
   url: `http://localhost:${port}`,
@@ -18,13 +18,15 @@ const moduleRegistration = {
   introduction: `React to a message with ✏️ to link your trello board, then use ✏️ again to send messages to your board.`,
   title: "Trello Integration",
   description: "Adds tasks to trello board",
-  event_types: [
-    "m.reaction"
-  ]
+  event_types: {
+    active: [
+      "m.reaction"
+    ]
+  }
 }
 
 function generateRegistrationFile() {
-  fs.writeFileSync(`./${moduleRegistration.id}.json`, JSON.stringify(moduleRegistration, null, 2));
+  fs.writeFileSync(`./${toolRegistration.id}.json`, JSON.stringify(toolRegistration, null, 2));
 }
 
 async function start() {
