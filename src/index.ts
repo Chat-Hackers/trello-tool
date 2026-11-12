@@ -8,7 +8,7 @@ import { deleteBoard, getBoardByRoomId, insertBoard } from './duckdb';
 
 const { wrapper_url } = process.env;
 
-const port = 5062;
+const port = 5052;
 
 const toolRegistration = {
   id: "trello",
